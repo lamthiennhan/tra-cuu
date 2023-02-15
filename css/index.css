@@ -1,0 +1,102 @@
+body {
+    font-family: 'Times New Roman', Times, serif !important;
+    font-size: 14px !important;
+
+    padding: 0 !important;
+    max-width: calc((100vw)-25px);
+}
+
+#navbar {
+    height: 75px !important;
+}
+
+#list-link a {
+    display: inline;
+
+    padding: 10px 30px !important;
+
+    font-weight: bold;
+    color: black;
+}
+
+#list-link a:hover {
+    color: white;
+    background-color: green;
+}
+
+#logo-a {
+    padding: 10px 0;
+    margin: 0 !important;
+}
+
+#logo-img {
+    width: auto;
+}
+
+#nav-left {
+    margin-left: 50px;
+}
+
+#nav-right {
+    position: absolute;
+    top: 6px;
+    right: 0;
+
+    width: 750px;
+
+    margin-right: 50px;
+}
+
+#nav-right .row {
+    margin: 0 !important;
+}
+
+#content{
+    max-width: 850px !important;
+}
+
+#content-item1 .row{
+    margin: 0 15px;
+}
+
+#search-input{
+margin: 0 !important;
+}
+
+#search input[type="radio"]{
+    margin: 0 10px 0 25px;
+}
+
+#list-tb th {
+    text-align: center !important;
+}
+
+.table-boder {
+    border: 1px solid black;
+}
+
+#list-tb table{
+    width: 850px;
+}
+
+.table-boder{
+margin-top: 25px;
+}
+
+th {
+    border-color: black !important;
+    border-right: 1px solid black;
+
+    width: 200px !important;
+}
+
+td {
+    border-color: black !important;
+}
+
+#group-function i {
+    cursor: pointer;
+    font-size: 3rem;
+
+    margin: 0 40px;
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="9783ddf9-529a-480c-8bd1-b39cd5e94899" name="webtracuu@192.168.2.145 Mapping">
+      <data-sources db="d43e55e2-a51e-4924-b9f1-783352a1f1d1" ddl="35e0c817-4486-47e5-a86f-c79898c5bea5" />
+      <scope>
+        <node kind="database" qname="webtracuu" />
+      </scope>
+    </mapping>
+  </component>
+</project>
