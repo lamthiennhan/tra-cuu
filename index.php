@@ -18,6 +18,11 @@ $ghiChu = "";
 //Câu truy vấn
 $sqlGetAll = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay FROM tbl_ThongTin";
 
+//Xóa
+if(isset($_GET['deleteMa'])){
+$do = delete($_GET['deleteMa']);
+}
+
 // sqlsrv_free_stmt($stmt);  // Giải phóng tài nguyên câu truy vấn
 // sqlsrv_close($conn);      // Giải phóng, ngắt kết nối SQL Server
 ?>
@@ -26,7 +31,6 @@ $sqlGetAll = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay FROM tbl_ThongTin";
 <html>
 
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -40,17 +44,14 @@ $sqlGetAll = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay FROM tbl_ThongTin";
     <link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
     <link href="css/plugins/timeline/timeline.css" rel="stylesheet">
 
-    <!-- SB Admin CSS - Include with every page -->
     <link href="css/sb-admin.css" rel="stylesheet">
 
     <!-- My CSS -->
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/index.css"> 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 </head>
 
 <body>
@@ -83,14 +84,13 @@ $sqlGetAll = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay FROM tbl_ThongTin";
             </nav>
     </article>
 
-
     <article id="content" class="container mb-5 mt-5">
         <div id="content-item1">
             <div class="row">
                 <!-- search -->
                 <div id="search" class="w-50 m-auto">
                     <div>
-                        <form class="user" method="POST">
+                        <form class="user" method="GET">
                             <div class="row d-flex mb-3">
                                 <input id="search-input" class="form-inline mr-sm-2 w-75" type="search"
                                     placeholder="Search" aria-label="Search" name="Ma">
@@ -111,16 +111,16 @@ $sqlGetAll = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay FROM tbl_ThongTin";
                 <div id="list-tb d-flex flex-column" style="width: 100%;">
                     <?php
                     //Tìm theo mã
-                    if (isset($_POST['Ma'])) {
-                        $maPOST = $_POST['Ma'];
+                    if (isset($_GET['Ma'])) {
+                        $maPOST = $_GET['Ma'];
 
                         //Truy vấn
-                        $tsql = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay,(SELECT NguoiDung FROM tbl_NguoiDung Where MaNV=TaiKhoan) TaiKhoan,GhiChu FROM tbl_ThongTin WHERE Ma = '$maPOST'";
+                        $sqlSearch = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay,(SELECT NguoiDung FROM tbl_NguoiDung Where MaNV=TaiKhoan) TaiKhoan,GhiChu FROM tbl_ThongTin WHERE Ma = '$maPOST'";
 
                         //Thức hiện câu truy vấn
-                        $stmt = sqlsrv_query($conn, $tsql);
+                        $doSearch = sqlsrv_query($conn, $sqlSearch);
 
-                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                        while ($row = sqlsrv_fetch_array($doSearch, SQLSRV_FETCH_ASSOC)) {
                             $ma = html_entity_decode($row["Ma"]);
                             $ten = $row["Ten"];
                             $viTri = $row["Vitri"];
@@ -163,7 +163,7 @@ $sqlGetAll = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay FROM tbl_ThongTin";
                                         <tr>
                                             <th class="table-info" scope="row">Hình Vị Trí</th>
                                             <td>
-                                                <form method="POST" action="upload.php" enctype="multipart/form-data">
+                                                <form method="GET" action="upload.php" enctype="multipart/form-data">
                                                     <p><img src="<?php echo $hinhViTri ?>" alt=""></p>
                                                     <div id="wrapper"><input type="file" name="fileToUpload" value="" />
                                                         <input type="submit" name="submit" value="Upload " />
@@ -174,7 +174,7 @@ $sqlGetAll = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay FROM tbl_ThongTin";
                                         <tr>
                                             <th class="table-info" scope="row">Hình Sơ Đồ Tủ</th>
                                             <td>
-                                                <form method="POST" action="upload.php" enctype="multipart/form-data">
+                                                <form method="GET" action="upload.php" enctype="multipart/form-data">
                                                     <p><img src="<?php echo $hinhSoDo ?>" alt=""></p>
                                                     <div id="wrapper"><input type="file" name="fileToUpload" value="" />
                                                         <input type="submit" name="submit" value="Upload " />
@@ -222,9 +222,9 @@ $sqlGetAll = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay FROM tbl_ThongTin";
                                             <th class="table-info" scope="row">Chức năng</th>
                                             <td class="text-center">
                                                 <div id="group-function">
-                                                    <i id="add" class="fas fa-plus-square"></i>
-                                                    <i id="edit" class="fas fa-edit"></i>
-                                                    <i id="delete" class="fas fa-trash"></i>
+                                                    <a href=""><i class="fas fa-plus-square"></i></a>
+                                                    <a href=""><i class="fas fa-edit"></i></a>
+                                                    <a href="?ma=<?php echo $ma ?>&deleteMa=<?php echo $ma ?>"><i class="fas fa-trash"></i></a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -234,19 +234,13 @@ $sqlGetAll = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay FROM tbl_ThongTin";
                             <?php
                         }
                     }
-                    sqlsrv_free_stmt($stmt);
+                    
                     sqlsrv_close($conn);
                     ?>
                 </div>
             </div>
         </div>
     </article>
-
-    <script>
-        $("#delete").click(function () {
-            $d = delete ($_POST['Ma']);
-        });
-    </script>
 </body>
 
 </html>
