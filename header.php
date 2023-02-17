@@ -13,19 +13,13 @@
                         <i class="fas fa-user-edit p-3"></i>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row w-50">
                     <ul class="nav nav-pills">
                         <li class="nav-item">
                             <a class="nav-link" href="index.php">Trang chủ</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="add.php">Thêm</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link 3</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link 4</a>
                         </li>
                     </ul>
                 </div>

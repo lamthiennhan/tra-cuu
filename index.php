@@ -183,7 +183,7 @@ if (isset($_GET['delete'])) {
                                                 <th class="table-info" scope="row">Chức năng</th>
                                                 <td class="text-center">
                                                     <div id="group-function">
-                                                        <a href="edit.php?ma=<?php echo $listInfor[$i][0] ?>&ten=<?php echo $listInfor[$i][1] ?>&viTri=<?php echo $listInfor[$i][2] ?>&hinhVitTri=<?php echo $listInfor[$i][3] ?>&hinhSoDo=<?php echo $listInfor[$i][4] ?>&vao=<?php echo $listInfor[$i][5] ?>&ra=<?php echo $listInfor[$i][6] ?>&danDuong=<?php echo $listInfor[$i][7] ?>&ngay=<?php echo $listInfor[$i][8] ?>&taiKhoan=<?php echo $listInfor[$i][9] ?>&ghiChu=<?php echo $listInfor[$i][10] ?>"><i class="fas fa-edit"></i></a>
+                                                        <a href="edit.php?ma=<?php echo $listInfor[$i][0] ?>&ten=<?php echo $listInfor[$i][1] ?>&viTri=<?php echo $listInfor[$i][2] ?>&hinhViTri=<?php echo $listInfor[$i][3] ?>&hinhSoDo=<?php echo $listInfor[$i][4] ?>&vao=<?php echo $listInfor[$i][5] ?>&ra=<?php echo $listInfor[$i][6] ?>&danDuong=<?php echo $listInfor[$i][7] ?>&ngay=<?php echo $listInfor[$i][8] ?>&taiKhoan=<?php echo $listInfor[$i][9] ?>&ghiChu=<?php echo $listInfor[$i][10] ?>"><i class="fas fa-edit"></i></a>
                                                         <a href="?delete=on&ma=<?php echo $ma ?>"><i
                                                                 class="fas fa-trash"></i></a>
                                                     </div>

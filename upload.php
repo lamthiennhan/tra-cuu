@@ -6,11 +6,11 @@ $uploadOk = 1;
 $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 // Get Ma từ form
 
-$Ma = isset($_POST['Ma']);
-$G = $_POST['Ma'];
+$Ma = isset($_POST['ma']);
+$G = $_POST['ma'];
 include "./Connect/Connect.php";
 echo "==============================:'$target_file' :============";
-if($target_file!="images/")
+if($target_file!="images/") 
 {
     $a=Update_Hinh_Vitri($G,$target_file);
 }

@@ -22,8 +22,14 @@ if (isset($_GET['ma'])) {
     $ma = $_GET['ma'];
     $ten = $_GET['ten'];
     $viTri = $_GET['viTri'];
-    $hinhViTri = null;
-    $hinhSoDo = null;
+    if (isset($_GET['hinhViTri']) || isset($_GET['hinhSoDo'])) {
+        $hinhViTri = $_GET['hinhViTri'];
+        $hinhSoDo = $_GET['hinhSoDo'];
+    } else {
+        $hinhViTri = 'images/' . $_GET['fileHinhViTri'];
+        $hinhSoDo = 'images/' . $_GET['fileHinhSoDo'];
+    }
+
     $vao = $_GET['vao'];
     $ra = $_GET['ra'];
     $danDuong = $_GET['danDuong'];
@@ -31,7 +37,9 @@ if (isset($_GET['ma'])) {
     $taiKhoan = $_GET['taiKhoan'];
     $ghiChu = $_GET['ghiChu'];
 
-    edit($ma,$ten,$viTri,$hinhViTri,$hinhSoDo,$vao,$ra,$danDuong,$ghiChu,$ngay,$taiKhoan);
+    edit($ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $ghiChu, $ngay, '17303');
+    //edit('D003','ten','vi tri','','','vao','ra','dan duong','ghi chu','1/13/2022','17303');
+    //edit('D001','Tu Dien','Phung Hoang Tien','images/cauhinh Bien Va LDT.PNG','images/cauhinh Bien Va LDT.PNG','Cong Tay','Phong ve Ky Lan Cung','Cong Tay -> Cung Dinh Tuu','ghi chu','1/13/2022','17303');
 }
 ?>
 
@@ -103,23 +111,19 @@ if (isset($_GET['ma'])) {
                                     <tr>
                                         <th class="table-info" scope="row">Hình Vị Trí</th>
                                         <td>
-                                            <!-- <form method="GET" action="upload.php" enctype="multipart/form-data">
-                                                                <p><img src="<?php echo $listInfor[$i][3] ?>" alt=""></p>
-                                                                <div id="wrapper"><input type="file" name="fileToUpload" value="" />
-                                                                    <input type="submit" name="submit" value="Upload " />
-                                                                </div>
-                                                            </form> -->
+                                            <p class="hinh"><img src="<?php echo $hinhViTri ?>" alt=""></p>
+                                            <div id="wrapper"><input type="file" name="fileHinhViTri"
+                                                    value="<?php echo $hinhViTri ?>" />
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="table-info" scope="row">Hình Sơ Đồ Tủ</th>
                                         <td>
-                                            <!-- <form method="GET" action="upload.php" enctype="multipart/form-data">
-                                                                <p><img src="<?php echo $listInfor[$i][4] ?>" alt=""></p>
-                                                                <div id="wrapper"><input type="file" name="fileToUpload" value="" />
-                                                                    <input type="submit" name="submit" value="Upload " />
-                                                                </div>
-                                                            </form> -->
+                                            <p class="hinh"><img src="<?php echo $hinhSoDo ?>" alt=""></p>
+                                            <div id="wrapper"><input type="file" name="fileHinhSoDo"
+                                                    value="<?php echo $hinhSoDo ?>" />
+                                            </div>
                                         </td>
                                     </tr>
 
