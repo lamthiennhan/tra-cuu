@@ -14,9 +14,9 @@ function Connect()
     $conn = sqlsrv_connect($serverName, $connectionInfo);
     return $conn;
 }
-function Update_Hinh_Vitri($Ma, $Hinh_Vitri)
+function Update_Hinh_Vitri($Ma,$Hinh_Vitri)
 {
-    $conn = Connect();
+    $conn=Connect();
     $sql = "UPDATE tbl_ThongTin SET Hinh_Vitri='$Hinh_Vitri' WHERE Ma='$Ma'";
     $stmt = sqlsrv_query($conn, $sql);
 
@@ -25,7 +25,7 @@ function Update_Hinh_Vitri($Ma, $Hinh_Vitri)
         die(print_r(sqlsrv_errors(), true));
     }
 
-    sqlsrv_free_stmt($stmt); // Giải phóng tài nguyên câu truy vấn
+    sqlsrv_free_stmt($stmt);  // Giải phóng tài nguyên câu truy vấn
     sqlsrv_close($conn);
 
     //return 1;
@@ -65,10 +65,10 @@ function add($ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $gh
     sqlsrv_close($conn);
 }
 
-function edit($ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $ghiChu, $ngay, $taiKhoan)
+function edit($ma, $ten, $viTri, $vao, $ra, $danDuong, $ghiChu, $ngay, $taiKhoan)
 {
     $conn = Connect();
-    $sql = "UPDATE tbl_ThongTin SET Ma='$ma',Ten='$ten',Vitri='$viTri',Hinh_ViTri='$hinhViTri',Hinh_SoDoTu='$hinhSoDo',Vao='$vao',Ra='$ra',DanDuong='$danDuong',GhiChu='$ghiChu',Ngay='$ngay',TaiKhoan='$taiKhoan' WHERE Ma='$ma'";
+    $sql = "UPDATE tbl_ThongTin SET Ma='$ma',Ten='$ten',Vitri='$viTri',Vao='$vao',Ra='$ra',DanDuong='$danDuong',GhiChu='$ghiChu',Ngay='$ngay',TaiKhoan='$taiKhoan' WHERE Ma='$ma'";
     
     $stmt = sqlsrv_query($conn, $sql);
 
@@ -80,4 +80,5 @@ function edit($ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $g
     sqlsrv_free_stmt($stmt); // Giải phóng tài nguyên câu truy vấn
     sqlsrv_close($conn);
 }
+
 ?>

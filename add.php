@@ -37,6 +37,8 @@ if (isset($_GET['ma'])) {
     add($ma,$ten,$viTri,'images/cauhinh Bien Va LDT.PNG','images/cauhinh Bien Va LDT.PNG',$vao,$ra,$danDuong,$ghiChu,$ngay,'17303');
     //edit('D003','ten','vi tri','','','vao','ra','dan duong','ghi chu','1/13/2022','17303');
     //edit('D001','Tu Dien','Phung Hoang Tien','images/cauhinh Bien Va LDT.PNG','images/cauhinh Bien Va LDT.PNG','Cong Tay','Phong ve Ky Lan Cung','Cong Tay -> Cung Dinh Tuu','ghi chu','1/13/2022','17303');
+
+
 }
 ?>
 

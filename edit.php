@@ -3,7 +3,8 @@ include "Connect/Connect.php";
 $conn = Connect();
 
 //Khai báo biến
-$listInfor = [];
+$maGET = "";
+$maPOST = "";
 
 $ma = "";
 $ten = "";
@@ -19,28 +20,44 @@ $ghiChu = "";
 
 //Sửa
 if (isset($_GET['ma'])) {
-    $ma = $_GET['ma'];
-    $ten = $_GET['ten'];
-    $viTri = $_GET['viTri'];
-    if (isset($_GET['hinhViTri']) || isset($_GET['hinhSoDo'])) {
-        $hinhViTri = $_GET['hinhViTri'];
-        $hinhSoDo = $_GET['hinhSoDo'];
-    } else {
-        $hinhViTri = 'images/' . $_GET['fileHinhViTri'];
-        $hinhSoDo = 'images/' . $_GET['fileHinhSoDo'];
-    }
-
-    $vao = $_GET['vao'];
-    $ra = $_GET['ra'];
-    $danDuong = $_GET['danDuong'];
-    $ngay = null;
-    $taiKhoan = $_GET['taiKhoan'];
-    $ghiChu = $_GET['ghiChu'];
-
-    edit($ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $ghiChu, $ngay, '17303');
-    //edit('D003','ten','vi tri','','','vao','ra','dan duong','ghi chu','1/13/2022','17303');
-    //edit('D001','Tu Dien','Phung Hoang Tien','images/cauhinh Bien Va LDT.PNG','images/cauhinh Bien Va LDT.PNG','Cong Tay','Phong ve Ky Lan Cung','Cong Tay -> Cung Dinh Tuu','ghi chu','1/13/2022','17303');
+    $maGET = $_GET['ma'];
 }
+
+//Truy vấn
+$sqlSearch = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay,(SELECT NguoiDung FROM tbl_NguoiDung Where MaNV=TaiKhoan) TaiKhoan,GhiChu FROM tbl_ThongTin WHERE Ma = '$maGET'";
+
+//Thức hiện câu truy vấn
+$doSearch = sqlsrv_query($conn, $sqlSearch);
+
+while ($row = sqlsrv_fetch_array($doSearch, SQLSRV_FETCH_ASSOC)) {
+    $ma = html_entity_decode($row["Ma"]);
+    $ten = $row["Ten"];
+    $viTri = $row["Vitri"];
+    $hinhViTri = $row["Hinh_ViTri"];
+    $hinhSoDo = $row["Hinh_SoDoTu"];
+    $vao = $row["Vao"];
+    $ra = $row["Ra"];
+    $danDuong = $row["DanDuong"];
+    $ngay = $row["Ngay"];
+    $taiKhoan = $row["TaiKhoan"];
+    $ghiChu = $row["GhiChu"];
+}
+
+if (isset($_POST['edit-ma'])) {
+    $ma = $_POST['edit-ma'];
+    $ten = $_POST['ten'];
+    $viTri = $_POST['viTri'];
+    $vao = $_POST['vao'];
+    $ra = $_POST['ra'];
+    $danDuong = $_POST['danDuong'];
+    $ngay = '';
+    $taiKhoan = $_POST['taiKhoan'];
+    $ghiChu = $_POST['ghiChu'];
+
+    edit($ma, $ten, $viTri, $vao, $ra, $danDuong, $ghiChu, $ngay, '17303');
+}
+
+sqlsrv_close($conn);
 ?>
 
 <!DOCTYPE html>
@@ -89,88 +106,91 @@ if (isset($_GET['ma'])) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <form action="./edit.php" method="get">
+                                <form method="POST" action="upload.php" enctype="multipart/form-data">
                                     <tr>
                                         <th class="table-info" scope="row">Mã</th>
                                         <td>
-                                            <input type="text" name="ma" id="" value="<?php echo $_GET['ma'] ?>">
+                                            <input type="text" name="edit-ma" id="edit-ma" value="<?php echo $ma ?>">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="table-info" scope="row">Tên</th>
                                         <td>
-                                            <input type="text" name="ten" id="" value="<?php echo $_GET['ten'] ?>">
+                                            <input type="text" name="ten" id="ten" value="<?php echo $ten ?>">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="table-info" scope="row">Vị Trí</th>
                                         <td>
-                                            <input type="text" name="viTri" id="" value="<?php echo $_GET['viTri'] ?>">
+                                            <input type="text" name="viTri" id="viTri" value="<?php echo $viTri ?>">
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class="table-info" scope="row">Hình Vị Trí</th>
-                                        <td>
-                                            <p class="hinh"><img src="<?php echo $hinhViTri ?>" alt=""></p>
-                                            <div id="wrapper"><input type="file" name="fileHinhViTri"
-                                                    value="<?php echo $hinhViTri ?>" />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="table-info" scope="row">Hình Sơ Đồ Tủ</th>
-                                        <td>
-                                            <p class="hinh"><img src="<?php echo $hinhSoDo ?>" alt=""></p>
-                                            <div id="wrapper"><input type="file" name="fileHinhSoDo"
-                                                    value="<?php echo $hinhSoDo ?>" />
-                                            </div>
-                                        </td>
-                                    </tr>
 
+                                        <td>
+                                            <p face="Times New Roman">Hình Vị Trí</p>
+                                        </td>
+
+                                        <td>
+                                            <p face="Times New Roman"><img src="<?php echo $target_file ?>" /></p>
+                                            <div id="wrapper"><input type="file" name="fileViTri" value="" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p face="Times New Roman">Hình Vị Trí</p>
+                                        </td>
+                                        <td>
+                                            <!-- <p face="Times New Roman"><img src="'.$f4.'" /></p>
+                                            <div id="wrapper"><input type="file" name="fileViTri" value="" />
+                                                <input type="submit" name="submit" value="Upload " />
+                                            </div> -->
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <th class="table-info" scope="row">Nguồn Vào</th>
                                         <td>
-                                            <input type="text" name="vao" id="" value="<?php echo $_GET['vao'] ?>">
+                                            <input type="text" name="vao" id="vao" value="<?php echo $vao ?>">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="table-info" scope="row">Cấp Nguồn Cho</th>
                                         <td>
-                                            <input type="text" name="ra" id="" value="<?php echo $_GET['ra'] ?>">
+                                            <input type="text" name="ra" id="ra" value="<?php echo $ra ?>">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="table-info" scope="row">Đường dẫn</th>
                                         <td>
-                                            <input type="text" name="danDuong" id=""
-                                                value="<?php echo $_GET['danDuong'] ?>">
+                                            <input type="text" name="danDuong" id="danDuong"
+                                                value="<?php echo $danDuong ?>">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="table-info" scope="row">Ngày</th>
                                         <td>
-                                            <input type="text" name="ngay" id="" value="<?php echo $_GET['ngay'] ?>">
+                                            <input type="text" name="ngay" id="ngay" value="<?php echo $ngay ?>">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="table-info" scope="row">Tài Khoản</th>
                                         <td>
-                                            <input type="text" name="taiKhoan" id=""
-                                                value="<?php echo $_GET['taiKhoan'] ?>">
+                                            <input type="text" name="taiKhoan" id="taiKhoan"
+                                                value="<?php echo $taiKhoan ?>">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="table-info" scope="row">Ghi Chú</th>
                                         <td>
-                                            <input type="text" name="ghiChu" id=""
-                                                value="<?php echo $_GET['ghiChu'] ?>">
+                                            <input type="text" name="ghiChu" id="ghiChu" value="<?php echo $ghiChu ?>">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="table-info" scope="row">Chức năng</th>
                                         <td class="text-center">
                                             <div id="group-function">
-                                                <input type="submit" value="Save">
+                                                <input type="submit" name="submit" value="Upload " />
                                             </div>
                                         </td>
                                     </tr>
