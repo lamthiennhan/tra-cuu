@@ -1,207 +1,111 @@
 <?php
 include "Connect/Connect.php";
-$conn = Connect();
 
 //Khai báo biến
-$maGET = "";
-$maPOST = "";
+$listInfor = [];
 
-$ma = "";
-$ten = "";
-$viTri = "";
-$hinhViTri = "";
-$hinhSoDo = "";
-$vao = "";
-$ra = "";
-$danDuong = "";
-$ngay = "";
-$taiKhoan = "";
-$ghiChu = "";
+$time = time();
+$datetimeinfo = getdate($time);
 
-//Sửa
-if (isset($_GET['ma'])) {
-    $maGET = $_GET['ma'];
+$ngay = $datetimeinfo['mon']."/".$datetimeinfo['mday']."/".$datetimeinfo['year'].' '.$datetimeinfo['hours'].':'.$datetimeinfo['minutes'].':'.$datetimeinfo['seconds'];
+
+$ma = $_POST['ma'];
+$ten = $_POST['ten'];
+$viTri = $_POST['viTri'];
+$vao = $_POST['vao'];
+$ra = $_POST['ra'];
+$danDuong = $_POST['danDuong'];
+$taiKhoan = $_POST['taiKhoan'];
+$ghiChu = $_POST['ghiChu'];
+
+//Upload file
+if (isset($_FILES["fileViTri"]) && $_FILES["fileViTri"]["name"] != null) {
+  $target_dir = "images/";
+  $target_file = $target_dir . basename($_FILES["fileViTri"]["name"]);
+
+  $uploadOk = 1;
+  $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+  if ($target_file != "images/") {
+    Up_Hinh_Vitri($ma, $target_file);
+  }
+
+  // Check if image file is a actual image or fake image
+  if (isset($_POST["submit"])) {
+    $check = getimagesize($_FILES["fileViTri"]["tmp_name"]);
+    if ($check !== false) {
+      echo "File is an image - " . $check["mime"] . ".";
+      $uploadOk = 1;
+    } else {
+      echo "File is not an image.";
+      $uploadOk = 0;
+    }
+  }
+
+  // Allow certain file formats
+  if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+    $uploadOk = 0;
+  }
+
+  // Check if $uploadOk is set to 0 by an error
+  if ($uploadOk == 0) {
+    echo "Sorry, your file was not uploaded.";
+    // if everything is ok, try to upload file
+  } else {
+    if (move_uploaded_file($_FILES["fileViTri"]["tmp_name"], $target_file)) {
+      echo "The file " . htmlspecialchars(basename($_FILES["fileViTri"]["name"])) . " has been uploaded.";
+      echo "==============================.'$ma'";
+    } else {
+      echo "Sorry, there was an error uploading your file.";
+    }
+  }
 }
 
-//Truy vấn
-$sqlSearch = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay,(SELECT NguoiDung FROM tbl_NguoiDung Where MaNV=TaiKhoan) TaiKhoan,GhiChu FROM tbl_ThongTin WHERE Ma = '$maGET'";
+if (isset($_FILES["fileSoDo"]) && $_FILES["fileSoDo"]["name"] != null) {
+  $target_dir = "images/";
+  $target_file = $target_dir . basename($_FILES["fileSoDo"]["name"]);
 
-//Thức hiện câu truy vấn
-$doSearch = sqlsrv_query($conn, $sqlSearch);
+  $uploadOk = 1;
+  $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-while ($row = sqlsrv_fetch_array($doSearch, SQLSRV_FETCH_ASSOC)) {
-    $ma = html_entity_decode($row["Ma"]);
-    $ten = $row["Ten"];
-    $viTri = $row["Vitri"];
-    $hinhViTri = $row["Hinh_ViTri"];
-    $hinhSoDo = $row["Hinh_SoDoTu"];
-    $vao = $row["Vao"];
-    $ra = $row["Ra"];
-    $danDuong = $row["DanDuong"];
-    $ngay = $row["Ngay"];
-    $taiKhoan = $row["TaiKhoan"];
-    $ghiChu = $row["GhiChu"];
+  if ($target_file != "images/") {
+    Up_Hinh_Sodo($ma, $target_file);
+  }
+
+  // Check if image file is a actual image or fake image
+  if (isset($_POST["submit"])) {
+    $check = getimagesize($_FILES["fileSoDo"]["tmp_name"]);
+    if ($check !== false) {
+      echo "File is an image - " . $check["mime"] . ".";
+      $uploadOk = 1;
+    } else {
+      echo "File is not an image.";
+      $uploadOk = 0;
+    }
+  }
+
+  // Allow certain file formats
+  if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+    $uploadOk = 0;
+  }
+
+  // Check if $uploadOk is set to 0 by an error
+  if ($uploadOk == 0) {
+    echo "Sorry, your file was not uploaded.";
+    // if everything is ok, try to upload file
+  } else {
+    if (move_uploaded_file($_FILES["fileViTri"]["tmp_name"], $target_file)) {
+      echo "The file " . htmlspecialchars(basename($_FILES["fileViTri"]["name"])) . " has been uploaded.";
+      echo "==============================.'$ma'";
+    } else {
+      echo "Sorry, there was an error uploading your file.";
+    }
+  }
 }
 
-if (isset($_POST['edit-ma'])) {
-    $ma = $_POST['edit-ma'];
-    $ten = $_POST['ten'];
-    $viTri = $_POST['viTri'];
-    $vao = $_POST['vao'];
-    $ra = $_POST['ra'];
-    $danDuong = $_POST['danDuong'];
-    $ngay = '';
-    $taiKhoan = $_POST['taiKhoan'];
-    $ghiChu = $_POST['ghiChu'];
+edit($ma, $ten, $viTri, $vao, $ra, $danDuong, $ghiChu, $ngay, ma_theo_tenNV($taiKhoan));
 
-    edit($ma, $ten, $viTri, $vao, $ra, $danDuong, $ghiChu, $ngay, '17303');
-}
-
-sqlsrv_close($conn);
+header("location:reEdit.php?ma=$ma");
 ?>
-
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Wed Tra Cuu</title>
-
-    <!-- Core CSS - Include with every page -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="font-awesome/css/fontawesome.min.css" rel="stylesheet">
-
-    <!-- Page-Level Plugin CSS - Dashboard -->
-    <link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
-    <link href="css/plugins/timeline/timeline.css" rel="stylesheet">
-
-    <link href="css/sb-admin.css" rel="stylesheet">
-
-    <!-- My CSS -->
-    <link rel="stylesheet" href="css/style.css">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-</head>
-
-<body>
-    <?php include 'header.php'; ?>
-
-    <article id="content" class="container mb-5 mt-5">
-        <div id="content-item1">
-            <div class="row d-flex justify-content-center">
-                <div id="title">Sửa</div>
-            </div>
-            <div class="row">
-                <div id="list-tb d-flex flex-column" style="width: 100%;">
-                    <div class="table-boder rounded">
-                        <table class="table m-0">
-                            <thead class="table-active">
-                                <tr>
-                                    <th class="border-bottom-0" scope="col">Trường thông tin</th>
-                                    <th class="border-bottom-0 border-right-0" scope="col">Thông tin</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <form method="POST" action="upload.php" enctype="multipart/form-data">
-                                    <tr>
-                                        <th class="table-info" scope="row">Mã</th>
-                                        <td>
-                                            <input type="text" name="edit-ma" id="edit-ma" value="<?php echo $ma ?>">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="table-info" scope="row">Tên</th>
-                                        <td>
-                                            <input type="text" name="ten" id="ten" value="<?php echo $ten ?>">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="table-info" scope="row">Vị Trí</th>
-                                        <td>
-                                            <input type="text" name="viTri" id="viTri" value="<?php echo $viTri ?>">
-                                        </td>
-                                    </tr>
-                                    <tr>
-
-                                        <td>
-                                            <p face="Times New Roman">Hình Vị Trí</p>
-                                        </td>
-
-                                        <td>
-                                            <p face="Times New Roman"><img src="<?php echo $target_file ?>" /></p>
-                                            <div id="wrapper"><input type="file" name="fileViTri" value="" />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <p face="Times New Roman">Hình Vị Trí</p>
-                                        </td>
-                                        <td>
-                                            <!-- <p face="Times New Roman"><img src="'.$f4.'" /></p>
-                                            <div id="wrapper"><input type="file" name="fileViTri" value="" />
-                                                <input type="submit" name="submit" value="Upload " />
-                                            </div> -->
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="table-info" scope="row">Nguồn Vào</th>
-                                        <td>
-                                            <input type="text" name="vao" id="vao" value="<?php echo $vao ?>">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="table-info" scope="row">Cấp Nguồn Cho</th>
-                                        <td>
-                                            <input type="text" name="ra" id="ra" value="<?php echo $ra ?>">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="table-info" scope="row">Đường dẫn</th>
-                                        <td>
-                                            <input type="text" name="danDuong" id="danDuong"
-                                                value="<?php echo $danDuong ?>">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="table-info" scope="row">Ngày</th>
-                                        <td>
-                                            <input type="text" name="ngay" id="ngay" value="<?php echo $ngay ?>">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="table-info" scope="row">Tài Khoản</th>
-                                        <td>
-                                            <input type="text" name="taiKhoan" id="taiKhoan"
-                                                value="<?php echo $taiKhoan ?>">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="table-info" scope="row">Ghi Chú</th>
-                                        <td>
-                                            <input type="text" name="ghiChu" id="ghiChu" value="<?php echo $ghiChu ?>">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="table-info" scope="row">Chức năng</th>
-                                        <td class="text-center">
-                                            <div id="group-function">
-                                                <input type="submit" name="submit" value="Upload " />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </form>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </article>
-</body>
-
-</html>

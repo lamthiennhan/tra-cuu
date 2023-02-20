@@ -1,20 +1,25 @@
 <?php
 include "Connect/Connect.php";
-$conn = Connect();
 
 //Khai báo biến
 $listInfor = [];
-
-//Câu truy vấn
-$sqlGetAll = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay FROM tbl_ThongTin";
 
 //Xóa
 if (isset($_GET['delete'])) {
     delete($_GET['ma']);
 }
+
+//Tìm theo mã
+if (isset($_GET['search_ma'])) {
+    if (isset($_GET['radio']) && $_GET['radio'] != "ma") {
+        $maGET = $_GET['search_ma'];
+        $listInfor = searchInfor($maGET);
+    } else {
+        $maGET = $_GET['search_ma'];
+        $listInfor = searchMa($maGET);
+    }
+}
 ?>
-
-
 
 <!DOCTYPE html>
 <html>
@@ -36,7 +41,7 @@ if (isset($_GET['delete'])) {
     <link href="css/sb-admin.css" rel="stylesheet">
 
     <!-- My CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/index.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
@@ -62,10 +67,10 @@ if (isset($_GET['delete'])) {
                                 <button class="btn btn-outline-success my-2 my-sm-0 w-25" type="submit">Search</button>
                             </div>
                             <div class="row d-flex justify-content-center">
-                                <input type="radio" id="html" name="fav_language" value="HTML">
-                                <label for="html">Mã</label>
-                                <input type="radio" id="css" name="fav_language" value="CSS">
-                                <label for="css">Thông tin</label>
+                                <input type="radio" id="html" name="radio" value="ma" checked>
+                                <label>Mã</label>
+                                <input type="radio" id="css" name="radio" value="thongTin">
+                                <label>Thông tin</label>
                             </div>
                         </form>
                     </div>
@@ -74,129 +79,204 @@ if (isset($_GET['delete'])) {
             </div>
             <div class="row">
                 <div id="list-tb d-flex flex-column" style="width: 100%;">
-                    <?php
-                    //Tìm theo mã
-                    if (isset($_GET['search_ma'])) {
-                        $maPOST = $_GET['search_ma'];
+                    <?php if (isset($_GET['search_ma'])) {
+                        if (isset($_GET['radio']) && $_GET['radio'] != "ma") {
+                            for ($i = 0; $i <= count($listInfor) - 1; $i++) { ?>
+                                <div class="table-boder rounded">
+                                    <table class="table m-0">
+                                        <thead class="table-active">
+                                            <tr>
+                                                <th class="border-bottom-0 w-25 text-center" scope="col">Trường thông tin</th>
+                                                <th class="border-bottom-0 border-right-0 text-center" scope="col">Thông tin
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <form action="./add.php" method="get">
+                                                <tr>
+                                                    <th class="table-info" scope="row">Mã</th>
+                                                    <td>
+                                                        <?php echo $listInfor[$i][0] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Tên</th>
+                                                    <td>
+                                                        <?php echo $listInfor[$i][1] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Vị Trí</th>
+                                                    <td>
+                                                        <?php echo $listInfor[$i][2] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Hình Vị Trí</th>
+                                                    <td>
+                                                        <div class="hinh"><img src="<?php echo $listInfor[$i][3] ?>"
+                                                                alt=""></div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Hình Sơ Đò Tủ</th>
+                                                    <td>
+                                                        <div class="hinh"><img src="<?php echo $listInfor[$i][4] ?>" alt="">
+                                                        </div>
+                                                    </td>
+                                                </tr>
 
-                        //Truy vấn
-                        $sqlSearch = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay,(SELECT NguoiDung FROM tbl_NguoiDung Where MaNV=TaiKhoan) TaiKhoan,GhiChu FROM tbl_ThongTin WHERE Ma = '$maPOST'";
+                                                <tr>
+                                                    <th class="table-info" scope="row">Nguồn Vào</th>
+                                                    <td>
+                                                        <?php echo $listInfor[$i][5] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Cấp Nguồn Cho</th>
+                                                    <td>
+                                                        <?php echo $listInfor[$i][6] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Đường dẫn</th>
+                                                    <td>
+                                                        <?php echo $listInfor[$i][7] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Ngày</th>
+                                                    <td>
+                                                        <?php echo $listInfor[$i][8]->format('Y-m-d H:i:s') ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Tài Khoản</th>
+                                                    <td>
+                                                        <?php echo $listInfor[$i][9] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Ghi Chú</th>
+                                                    <td>
+                                                        <?php echo $listInfor[$i][10] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Chức năng</th>
+                                                    <td class="text-center">
+                                                        <div id="group-function">
+                                                            <a href="reEdit.php?ma=<?php echo $listInfor[$i][0] ?>"><i
+                                                                    class="fas fa-edit"></i></a>
+                                                            <a href="index.php?ma=<?php echo $listInfor[$i][0] ?>"><i
+                                                                    class="fas fa-trash"></i></a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </form>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <?php
+                            }
+                        } else {
+                            if ($listInfor) { ?>
+                                <div class="table-boder rounded">
+                                    <table class="table m-0">
+                                        <thead class="table-active">
+                                            <tr>
+                                                <th class="border-bottom-0 w-25 text-center" scope="col">Trường thông tin</th>
+                                                <th class="border-bottom-0 border-right-0 text-center" scope="col">Thông tin
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <form action="./add.php" method="get">
+                                                <tr>
+                                                    <th class="table-info" scope="row">Mã</th>
+                                                    <td>
+                                                        <?php echo $listInfor[0] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Tên</th>
+                                                    <td>
+                                                        <?php echo $listInfor[1] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Vị Trí</th>
+                                                    <td>
+                                                        <?php echo $listInfor[2] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Hình Vị Trí</th>
+                                                    <td>
+                                                        <div class="hinh"><img src="<?php echo $listInfor[3] ?>" alt=""></div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Hình Sơ Đò Tủ</th>
+                                                    <td>
+                                                        <div class="hinh"><img src="<?php echo $listInfor[4] ?>" alt=""></div>
+                                                    </td>
+                                                </tr>
 
-                        //Thức hiện câu truy vấn
-                        $doSearch = sqlsrv_query($conn, $sqlSearch);
-
-                        while ($row = sqlsrv_fetch_array($doSearch, SQLSRV_FETCH_ASSOC)) {
-                            $ma = html_entity_decode($row["Ma"]);
-                            $ten = $row["Ten"];
-                            $viTri = $row["Vitri"];
-                            $hinhViTri = $row["Hinh_ViTri"];
-                            $hinhSoDo = $row["Hinh_SoDoTu"];
-                            $vao = $row["Vao"];
-                            $ra = $row["Ra"];
-                            $danDuong = $row["DanDuong"];
-                            $ngay = $row["Ngay"];
-                            $taiKhoan = $row["TaiKhoan"];
-                            $ghiChu = $row["GhiChu"];
-
-                            array_push($listInfor, [$ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $ngay, $taiKhoan, $ghiChu]);
+                                                <tr>
+                                                    <th class="table-info" scope="row">Nguồn Vào</th>
+                                                    <td>
+                                                        <?php echo $listInfor[5] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Cấp Nguồn Cho</th>
+                                                    <td>
+                                                        <?php echo $listInfor[6] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Đường dẫn</th>
+                                                    <td>
+                                                        <?php echo $listInfor[7] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Ngày</th>
+                                                    <td>
+                                                        <?php echo $listInfor[8] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Tài Khoản</th>
+                                                    <td>
+                                                        <?php echo $listInfor[9] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Ghi Chú</th>
+                                                    <td>
+                                                        <?php echo $listInfor[10] ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="table-info" scope="row">Chức năng</th>
+                                                    <td class="text-center">
+                                                        <div id="group-function">
+                                                            <a href="reEdit.php?ma=<?php echo $listInfor[0] ?>"><i
+                                                                    class="fas fa-edit"></i></a>
+                                                            <a href="index.php?ma=<?php echo $listInfor[0] ?>"><i
+                                                                    class="fas fa-trash"></i></a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </form>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            <?php }
                         }
-                        for ($i = 0; $i <= count($listInfor) - 1; $i++) {
-                            ?>
-                            <div class="table-boder rounded">
-                                <table class="table m-0">
-                                    <thead class="table-active">
-                                        <tr>
-                                            <th class="border-bottom-0" scope="col">Trường thông tin</th>
-                                            <th class="border-bottom-0 border-right-0" scope="col">Thông tin</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <form action="./add.php" method="get">
-                                            <tr>
-                                                <th class="table-info" scope="row">Mã</th>
-                                                <td>
-                                                    <?php echo $listInfor[$i][0] ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="table-info" scope="row">Tên</th>
-                                                <td>
-                                                    <?php echo $listInfor[$i][1] ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="table-info" scope="row">Vị Trí</th>
-                                                <td>
-                                                    <?php echo $listInfor[$i][2] ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                            <th class="table-info" scope="row">Hình Vị Trí</th>
-                                                <td>
-                                                    <div class="hinh"><img src="<?php echo $listInfor[$i][3] ?>" alt=""></div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                            <th class="table-info" scope="row">Hình Sơ Đò Tủ</th>
-                                                <td>
-                                                <div class="hinh"><img src="<?php echo $listInfor[$i][4] ?>" alt=""></div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <th class="table-info" scope="row">Nguồn Vào</th>
-                                                <td>
-                                                    <?php echo $listInfor[$i][5] ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="table-info" scope="row">Cấp Nguồn Cho</th>
-                                                <td>
-                                                    <?php echo $listInfor[$i][6] ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="table-info" scope="row">Đường dẫn</th>
-                                                <td>
-                                                    <?php echo $listInfor[$i][7] ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="table-info" scope="row">Ngày</th>
-                                                <td>
-                                                    <?php echo $listInfor[$i][8] ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="table-info" scope="row">Tài Khoản</th>
-                                                <td>
-                                                    <?php echo $listInfor[$i][9] ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="table-info" scope="row">Ghi Chú</th>
-                                                <td>
-                                                    <?php echo $listInfor[$i][10] ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="table-info" scope="row">Chức năng</th>
-                                                <td class="text-center">
-                                                    <div id="group-function">
-                                                        <a href="edit.php?ma=<?php echo $listInfor[$i][0] ?>"><i class="fas fa-edit"></i></a>
-                                                        <a href="?delete=on&ma=<?php echo $ma ?>"><i
-                                                                class="fas fa-trash"></i></a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </form>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <?php
-                        }
-                    }
-                    ?>
+                    } ?>
                 </div>
             </div>
         </div>
