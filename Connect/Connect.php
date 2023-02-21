@@ -1,6 +1,4 @@
 <?php
-header('Content-Type: text/html; charset=utf-8');
-
 /* Địa chỉ SQL Server */
 function Connect()
 {
@@ -14,11 +12,13 @@ function Connect()
 
     /* Thực hiện kết nối */
     $conn = sqlsrv_connect($serverName, $connectionInfo);
+
     return $conn;
 }
 function Up_Hinh_Vitri($ma, $hinh)
 {
     $conn = Connect();
+
     $sql = "UPDATE tbl_ThongTin SET Hinh_Vitri='$hinh' WHERE Ma='$ma'";
     $stmt = sqlsrv_query($conn, $sql);
 
@@ -34,6 +34,7 @@ function Up_Hinh_Vitri($ma, $hinh)
 function Up_Hinh_Sodo($ma, $hinh)
 {
     $conn = Connect();
+
     $sql = "UPDATE tbl_ThongTin SET Hinh_SoDoTu='$hinh' WHERE Ma='$ma'";
     $stmt = sqlsrv_query($conn, $sql);
 
@@ -65,11 +66,18 @@ function delete($ma)
 function add($ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $ghiChu, $ngay, $taiKhoan)
 {
     $conn = Connect();
-    //$a = "N'tủ'";
+
+    $ma = "N'" . $ma . "'";
+    $ten = "N'" . $ten . "'";
+    $viTri = "N'" . $viTri . "'";
+    $vao = "N'" . $vao . "'";
+    $ra = "N'" . $ra . "'";
+    $danDuong = "N'" . $danDuong . "'";
+    $ghiChu = "N'" . $ghiChu . "'";
+    $taiKhoan = "N'" . $taiKhoan . "'";
+
     $sql = "INSERT INTO tbl_ThongTin (Ma,Ten,Vitri,Hinh_ViTri,Hinh_SoDoTu,Vao,Ra,DanDuong,GhiChu,Ngay,TaiKhoan)
-    VALUES ('$ma','N' +'$ten' ,'$viTri','$hinhViTri','$hinhSoDo','$vao','$ra','$danDuong','$ghiChu', '$ngay','$taiKhoan')";
-
-
+    VALUES ($ma,$ten,$viTri,'$hinhViTri','$hinhSoDo',$vao,$ra,$danDuong,$ghiChu,'$ngay',$taiKhoan)";
     $stmt = sqlsrv_query($conn, $sql);
 
     if ($stmt === false) {
@@ -84,7 +92,17 @@ function add($ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $gh
 function edit($ma, $ten, $viTri, $vao, $ra, $danDuong, $ghiChu, $ngay, $taiKhoan)
 {
     $conn = Connect();
-    $sql = "UPDATE tbl_ThongTin SET Ma='$ma',Ten='$ten',Vitri='$viTri',Vao='$vao',Ra='$ra',DanDuong='$danDuong',GhiChu='$ghiChu',Ngay='$ngay',TaiKhoan='$taiKhoan' WHERE Ma='$ma'";
+
+    $ma = "N'" . $ma . "'";
+    $ten = "N'" . $ten . "'";
+    $viTri = "N'" . $viTri . "'";
+    $vao = "N'" . $vao . "'";
+    $ra = "N'" . $ra . "'";
+    $danDuong = "N'" . $danDuong . "'";
+    $ghiChu = "N'" . $ghiChu . "'";
+    $taiKhoan = "N'" . $taiKhoan . "'";
+
+    $sql = "UPDATE tbl_ThongTin SET Ma=$ma,Ten=$ten,Vitri=$viTri,Vao=$vao,Ra=$ra,DanDuong=$danDuong,GhiChu=$ghiChu,Ngay='$ngay',TaiKhoan=$taiKhoan WHERE Ma=$ma";
 
     $stmt = sqlsrv_query($conn, $sql);
 
@@ -160,6 +178,7 @@ function listAccount()
     return $arr;
 }
 
+//Xuất maNV theo ten
 function ma_theo_tenNV($tenNV)
 {
     $conn = Connect();
@@ -182,6 +201,32 @@ function ma_theo_tenNV($tenNV)
     sqlsrv_close($conn);
 
     return $ma;
+}
+
+//Xuất ten theo maNV
+function tenNV_theo_ma($ma)
+{
+    $conn = Connect();
+    $sql = "SELECT * FROM [tbl_NguoiDung]";
+
+    $stmt = sqlsrv_query($conn, $sql);
+
+    $tenNV = "";
+    if ($stmt === false) {
+        echo "Lỗi truy vấn.</br>";
+        die(print_r(sqlsrv_errors(), true));
+    }
+
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+        if ($ma === html_entity_decode($row["MaNV"])) {
+            $tenNV = $row["NguoiDung"];
+        }
+    }
+
+    sqlsrv_free_stmt($stmt); // Giải phóng tài nguyên câu truy vấn
+    sqlsrv_close($conn);
+
+    return $tenNV;
 }
 
 function searchInfor($infor)
@@ -217,5 +262,29 @@ function searchInfor($infor)
     sqlsrv_close($conn);
 
     return $arr;
+}
+
+function checkLogin($user, $pass)
+{
+    $conn = Connect();
+    $sql = "SELECT * FROM [tbl_NguoiDung]";
+
+    $stmt = sqlsrv_query($conn, $sql);
+
+    if ($stmt === false) {
+        echo "Lỗi truy vấn.</br>";
+        die(print_r(sqlsrv_errors(), true));
+    }
+
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+        if ($pass == $row["MatKhau"] && $user == html_entity_decode($row["MaNV"])) {
+            return true;
+        }
+    }
+
+    sqlsrv_free_stmt($stmt); // Giải phóng tài nguyên câu truy vấn
+    sqlsrv_close($conn);
+
+    return false;
 }
 ?>

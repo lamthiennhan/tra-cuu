@@ -8,7 +8,7 @@ include "Connect/Connect.php";
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
     <title>Wed Tra Cuu</title>
 
     <!-- Core CSS - Include with every page -->
@@ -70,15 +70,15 @@ include "Connect/Connect.php";
                                     <tr>
                                         <th class="table-info" scope="row">Hình Vị Trí</th>
                                         <td>
-                                            <div class="hinh mb-4"><img src="" alt=""></div>
-                                            <input type="file" name="fileViTri" value="" />
+                                            <div class="hinh mb-4"><img id="blah" src="" alt=""></div>
+                                            <input id="imgInp" type="file" name="fileViTri" value="" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <th class="table-info" scope="row">Hình Sơ Đồ</th>
                                         <td>
-                                            <div class="hinh mb-4"><img src="" alt=""></div>
-                                            <input type="file" name="fileSoDo" value="" />
+                                            <div class="hinh mb-4"><img id="blah1" src="" alt=""></div>
+                                            <input id="imgInp1" type="file" name="fileSoDo" value="" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -100,16 +100,6 @@ include "Connect/Connect.php";
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class="table-info" scope="row">Tài Khoản</th>
-                                        <td>
-                                            <select name="taiKhoan" id="taiKhoan" class="w-100">
-                                                <?php foreach (listAccount() as $key => $value) { ?>
-                                                    <option value="<?php echo $value[1] ?>"><?php echo $value[1] ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
                                         <th class="table-info" scope="row">Ghi Chú</th>
                                         <td>
                                             <input type="text" name="ghiChu" id="ghiChu" value="">
@@ -119,7 +109,7 @@ include "Connect/Connect.php";
                                         <th class="table-info" scope="row">Chức năng</th>
                                         <td class="text-center">
                                             <div id="group-function">
-                                                <input type="submit" name="submit" value="Save" />
+                                                <input type="submit" name="submit" value="Upload" />
                                             </div>
                                         </td>
                                     </tr>
@@ -131,6 +121,43 @@ include "Connect/Connect.php";
             </div>
         </div>
     </article>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#imgInp").change(function () {
+            readURL(this);
+        });
+
+        function readURL1(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah1').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#imgInp1").change(function () {
+            readURL1(this);
+        });
+
+    </script>
 </body>
 
 </html>

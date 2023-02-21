@@ -8,20 +8,21 @@
             </div>
             <div id="nav-right" class="d-flex flex-column align-items-end">
                 <div class="row">
-                    <div id="card-user.">
-                        <!-- user -->
-                        <i class="fas fa-user-edit p-3"></i>
-                    </div>
-                </div>
-                <div class="row w-50">
-                    <ul class="nav nav-pills">
+                    <ul class="nav nav-pills mb-4">
                         <li class="nav-item">
                             <a class="nav-link" href="index.php">Trang chủ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="add.php">Thêm</a>
+                            <a class="nav-link" href="reAdd.php">Thêm</a>
                         </li>
                     </ul>
+                </div>
+                <div class="row">
+                    <div id="card-user">
+                        <!-- user -->
+                        <?php echo tenNV_theo_ma($_COOKIE['user']) ?>
+                        <a href="?logout=true"><i class="fas fa-sign-out-alt"></i></a>
+                    </div>
                 </div>
             </div>
             <!-- /.navbar-header -->

@@ -4,7 +4,7 @@ include "Connect/Connect.php";
 $time = time();
 $datetimeinfo = getdate($time);
 
-$ngay = $datetimeinfo['mon']."/".$datetimeinfo['mday']."/".$datetimeinfo['year'].' '.$datetimeinfo['hours'].':'.$datetimeinfo['minutes'].':'.$datetimeinfo['seconds'];
+$ngay = $datetimeinfo['mon'] . "/" . $datetimeinfo['mday'] . "/" . $datetimeinfo['year'];
 
 if (isset($_POST['ma'])) {
     $ma = $_POST['ma'];
@@ -13,13 +13,15 @@ if (isset($_POST['ma'])) {
     $vao = $_POST['vao'];
     $ra = $_POST['ra'];
     $danDuong = $_POST['danDuong'];
-    $taiKhoan = $_POST['taiKhoan'];
     $ghiChu = $_POST['ghiChu'];
 
     $hinhViTri = "";
     $hinhSoDo = "";
+
+    $taiKhoan = $_COOKIE['user'];
 }
 
+//Upload file
 if (isset($_FILES["fileViTri"]) && $_FILES["fileViTri"]["name"] != null) {
     $target_dir = "images/";
     $target_file = $target_dir . basename($_FILES["fileViTri"]["name"]);
@@ -28,7 +30,7 @@ if (isset($_FILES["fileViTri"]) && $_FILES["fileViTri"]["name"] != null) {
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
     if ($target_file != "images/") {
-        Up_Hinh_Vitri($ma, $target_file);
+        $hinhViTri = $target_file;
     }
 
     // Check if image file is a actual image or fake image
@@ -71,7 +73,7 @@ if (isset($_FILES["fileSoDo"]) && $_FILES["fileSoDo"]["name"] != null) {
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
     if ($target_file != "images/") {
-        Up_Hinh_Sodo($ma, $target_file);
+        $hinhSoDo = $target_file;
     }
 
     // Check if image file is a actual image or fake image
@@ -106,9 +108,10 @@ if (isset($_FILES["fileSoDo"]) && $_FILES["fileSoDo"]["name"] != null) {
     }
 }
 
-if (isset($_POST['ma'])) {
-    add($ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $ghiChu, $ngay, ma_theo_tenNV($taiKhoan));
-}
 
-header("location:reAdd.php");
+// if (isset($_POST['ma'])) {
+//     add($ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $ghiChu, $ngay, $taiKhoan);
+// }
+
+// header("location:reAdd.php");
 ?>

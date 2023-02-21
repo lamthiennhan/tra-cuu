@@ -1,4 +1,14 @@
 <?php
+if (count($_COOKIE) <= 0 ) {
+    header("location:login.php");
+}
+
+if(isset($_GET['logout'])){
+    setcookie("user", "", time() - 9999);
+    setcookie("pass", "", time() - 9999);
+    header("location:index.php");
+}
+
 include "Connect/Connect.php";
 
 //Khai báo biến
@@ -114,12 +124,11 @@ if (isset($_GET['search_ma'])) {
                                                 <tr>
                                                     <th class="table-info" scope="row">Hình Vị Trí</th>
                                                     <td>
-                                                        <div class="hinh"><img src="<?php echo $listInfor[$i][3] ?>"
-                                                                alt=""></div>
+                                                        <div class="hinh"><img src="<?php echo $listInfor[$i][3] ?>" alt=""></div>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <th class="table-info" scope="row">Hình Sơ Đò Tủ</th>
+                                                    <th class="table-info" scope="row">Hình Sơ Đồ Tủ</th>
                                                     <td>
                                                         <div class="hinh"><img src="<?php echo $listInfor[$i][4] ?>" alt="">
                                                         </div>
@@ -217,7 +226,7 @@ if (isset($_GET['search_ma'])) {
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <th class="table-info" scope="row">Hình Sơ Đò Tủ</th>
+                                                    <th class="table-info" scope="row">Hình Sơ Đồ Tủ</th>
                                                     <td>
                                                         <div class="hinh"><img src="<?php echo $listInfor[4] ?>" alt=""></div>
                                                     </td>

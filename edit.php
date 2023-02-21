@@ -7,7 +7,7 @@ $listInfor = [];
 $time = time();
 $datetimeinfo = getdate($time);
 
-$ngay = $datetimeinfo['mon']."/".$datetimeinfo['mday']."/".$datetimeinfo['year'].' '.$datetimeinfo['hours'].':'.$datetimeinfo['minutes'].':'.$datetimeinfo['seconds'];
+$ngay = $datetimeinfo['mon']."/".$datetimeinfo['mday']."/".$datetimeinfo['year'];
 
 $ma = $_POST['ma'];
 $ten = $_POST['ten'];
@@ -15,8 +15,9 @@ $viTri = $_POST['viTri'];
 $vao = $_POST['vao'];
 $ra = $_POST['ra'];
 $danDuong = $_POST['danDuong'];
-$taiKhoan = $_POST['taiKhoan'];
 $ghiChu = $_POST['ghiChu'];
+
+$taiKhoan = $_COOKIE['user'];
 
 //Upload file
 if (isset($_FILES["fileViTri"]) && $_FILES["fileViTri"]["name"] != null) {
@@ -105,7 +106,7 @@ if (isset($_FILES["fileSoDo"]) && $_FILES["fileSoDo"]["name"] != null) {
   }
 }
 
-edit($ma, $ten, $viTri, $vao, $ra, $danDuong, $ghiChu, $ngay, ma_theo_tenNV($taiKhoan));
+edit($ma, $ten, $viTri, $vao, $ra, $danDuong, $ghiChu, $ngay, $taiKhoan);
 
 header("location:reEdit.php?ma=$ma");
 ?>

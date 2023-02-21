@@ -1,4 +1,14 @@
 <?php
+if (count($_COOKIE) <= 0 ) {
+    header("location:login.php");
+}
+
+if(isset($_GET['logout'])){
+    setcookie("user", "", time() - 9999);
+    setcookie("pass", "", time() - 9999);
+    header("location:index.php");
+}
+
 include "Connect/Connect.php";
 
 //Khai báo biến
@@ -76,7 +86,8 @@ $listInfor = searchMa($ma);
                                         <tr>
                                             <th class="table-info" scope="row">Mã</th>
                                             <td>
-                                                <input type="text" name="ma" id="ma" value="<?php echo $listInfor[0] ?>" required>
+                                                <input type="text" name="ma" id="ma" value="<?php echo $listInfor[0] ?>"
+                                                    required>
                                             </td>
                                         </tr>
                                         <tr>
@@ -95,15 +106,17 @@ $listInfor = searchMa($ma);
                                         <tr>
                                             <th class="table-info" scope="row">Hình Vị Trí</th>
                                             <td>
-                                                <div class="hinh mb-4"><img src="<?php echo $listInfor[3] ?>" alt=""></div>
-                                                <input type="file" name="fileViTri" value="" />
+                                                <div class="hinh mb-4"><img id="blah" src="<?php echo $listInfor[3] ?>"
+                                                        alt=""></div>
+                                                <input id="imgInp" type="file" name="fileViTri" value="" />
                                             </td>
                                         </tr>
                                         <tr>
                                             <th class="table-info" scope="row">Hình Sơ Đồ</th>
                                             <td>
-                                                <div class="hinh mb-4"><img src="<?php echo $listInfor[4] ?>" alt=""></div>
-                                                <input type="file" name="fileSoDo" value="" />
+                                                <div class="hinh mb-4"><img id="blah1" src="<?php echo $listInfor[4] ?>"
+                                                        alt=""></div>
+                                                <input id="imgInp1" type="file" name="fileSoDo" value="" />
                                             </td>
                                         </tr>
                                         <tr>
@@ -123,22 +136,6 @@ $listInfor = searchMa($ma);
                                             <td>
                                                 <input type="text" name="danDuong" id="danDuong"
                                                     value="<?php echo $listInfor[7] ?>">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th class="table-info" scope="row">Ngày</th>
-                                            <td>
-                                                <?php echo $listInfor[8] ?>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th class="table-info" scope="row">Tài Khoản</th>
-                                            <td>
-                                                <select name="taiKhoan" id="taiKhoan" class="w-100">
-                                                    <?php foreach (listAccount() as $key => $value) { ?>
-                                                        <option value="<?php echo $value[1] ?>"><?php echo $value[1] ?></option>
-                                                    <?php } ?>
-                                                </select>
                                             </td>
                                         </tr>
                                         <tr>
@@ -165,6 +162,43 @@ $listInfor = searchMa($ma);
             </div>
         </div>
     </article>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#imgInp").change(function () {
+            readURL(this);
+        });
+
+        function readURL1(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah1').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#imgInp1").change(function () {
+            readURL1(this);
+        });
+
+    </script>
 </body>
 
 </html>
