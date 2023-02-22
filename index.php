@@ -1,11 +1,11 @@
 <?php
-if (count($_COOKIE) <= 0 ) {
+if (!isset($_COOKIE['user'])) {
     header("location:login.php");
 }
 
-if(isset($_GET['logout'])){
-    setcookie("user", "", time() - 9999);
-    setcookie("pass", "", time() - 9999);
+if (isset($_GET['logout'])) {
+    setcookie("user", "", time() - 99999);
+    setcookie("pass", "", time() - 99999);
     header("location:index.php");
 }
 
@@ -51,7 +51,7 @@ if (isset($_GET['search_ma'])) {
     <link href="css/sb-admin.css" rel="stylesheet">
 
     <!-- My CSS -->
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/style.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
@@ -68,7 +68,7 @@ if (isset($_GET['search_ma'])) {
             </div>
             <div class="row">
                 <!-- search -->
-                <div id="search" class="w-50 m-auto">
+                <div id="search" class="m-auto">
                     <div>
                         <form class="user" method="GET">
                             <div class="row d-flex mb-3">
@@ -77,7 +77,7 @@ if (isset($_GET['search_ma'])) {
                                 <button class="btn btn-outline-success my-2 my-sm-0 w-25" type="submit">Search</button>
                             </div>
                             <div class="row d-flex justify-content-center">
-                                <input type="radio" id="html" name="radio" value="ma" checked>
+                                <input type="radio" id="html" name="radio" value="ma">
                                 <label>Mã</label>
                                 <input type="radio" id="css" name="radio" value="thongTin">
                                 <label>Thông tin</label>
@@ -156,7 +156,7 @@ if (isset($_GET['search_ma'])) {
                                                 <tr>
                                                     <th class="table-info" scope="row">Ngày</th>
                                                     <td>
-                                                        <?php echo $listInfor[$i][8]->format('Y-m-d H:i:s') ?>
+                                                        <?php echo $listInfor[$i][8] ?>
                                                     </td>
                                                 </tr>
                                                 <tr>

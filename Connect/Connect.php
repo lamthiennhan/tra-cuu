@@ -15,11 +15,13 @@ function Connect()
 
     return $conn;
 }
-function Up_Hinh_Vitri($ma, $hinh)
+
+// Search
+function searchMa($ma)
 {
     $conn = Connect();
+    $sql = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay,(SELECT NguoiDung FROM tbl_NguoiDung Where MaNV=TaiKhoan) TaiKhoan,GhiChu FROM tbl_ThongTin WHERE Ma = '$ma'";
 
-    $sql = "UPDATE tbl_ThongTin SET Hinh_Vitri='$hinh' WHERE Ma='$ma'";
     $stmt = sqlsrv_query($conn, $sql);
 
     if ($stmt === false) {
@@ -27,15 +29,37 @@ function Up_Hinh_Vitri($ma, $hinh)
         die(print_r(sqlsrv_errors(), true));
     }
 
+    $arr = [];
+
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+        $ma = html_entity_decode($row["Ma"]);
+        $ten = $row["Ten"];
+        $viTri = $row["Vitri"];
+        $hinhViTri = $row["Hinh_ViTri"];
+        $hinhSoDo = $row["Hinh_SoDoTu"];
+        $vao = $row["Vao"];
+        $ra = $row["Ra"];
+        $danDuong = $row["DanDuong"];
+        $ngay = $row["Ngay"];
+        $taiKhoan = $row["TaiKhoan"];
+        $ghiChu = $row["GhiChu"];
+
+        $arr = [$ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $ngay, $taiKhoan, $ghiChu];
+    }
+
     sqlsrv_free_stmt($stmt); // Giải phóng tài nguyên câu truy vấn
     sqlsrv_close($conn);
+
+    return $arr;
 }
 
-function Up_Hinh_Sodo($ma, $hinh)
+function searchInfor($infor)
 {
     $conn = Connect();
 
-    $sql = "UPDATE tbl_ThongTin SET Hinh_SoDoTu='$hinh' WHERE Ma='$ma'";
+    $infor = "N'%" . $infor . "%'";
+
+    $sql = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay,(SELECT NguoiDung FROM tbl_NguoiDung Where MaNV=TaiKhoan) TaiKhoan FROM tbl_ThongTin WHERE Ma LIKE $infor OR Ten LIKE $infor OR Vitri LIKE $infor OR Vao LIKE $infor OR Ra LIKE $infor OR DanDuong LIKE $infor OR GhiChu LIKE $infor OR Ngay LIKE $infor OR TaiKhoan LIKE $infor";
     $stmt = sqlsrv_query($conn, $sql);
 
     if ($stmt === false) {
@@ -43,26 +67,31 @@ function Up_Hinh_Sodo($ma, $hinh)
         die(print_r(sqlsrv_errors(), true));
     }
 
-    sqlsrv_free_stmt($stmt); // Giải phóng tài nguyên câu truy vấn
-    sqlsrv_close($conn);
-}
+    $arr = [];
 
-function delete($ma)
-{
-    $conn = Connect();
-    $sql = "DELETE FROM tbl_ThongTin WHERE Ma='$ma'";
-    $stmt = sqlsrv_query($conn, $sql);
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+        $ma = html_entity_decode($row["Ma"]);
+        $ten = $row["Ten"];
+        $viTri = $row["Vitri"];
+        $hinhViTri = $row["Hinh_ViTri"];
+        $hinhSoDo = $row["Hinh_SoDoTu"];
+        $vao = $row["Vao"];
+        $ra = $row["Ra"];
+        $danDuong = $row["DanDuong"];
+        $ngay = $row["Ngay"];
+        $taiKhoan = $row["TaiKhoan"];
+        $ghiChu = $row["GhiChu"];
 
-    if ($stmt === false) {
-        echo "Lỗi truy vấn.</br>";
-        die(print_r(sqlsrv_errors(), true));
+        array_push($arr, [$ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $ngay, $taiKhoan, $ghiChu]);
     }
 
     sqlsrv_free_stmt($stmt); // Giải phóng tài nguyên câu truy vấn
     sqlsrv_close($conn);
 
+    return $arr;
 }
 
+// Add, edit, delete
 function add($ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $ghiChu, $ngay, $taiKhoan)
 {
     $conn = Connect();
@@ -115,11 +144,10 @@ function edit($ma, $ten, $viTri, $vao, $ra, $danDuong, $ghiChu, $ngay, $taiKhoan
     sqlsrv_close($conn);
 }
 
-function searchMa($ma)
+function delete($ma)
 {
     $conn = Connect();
-    $sql = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay,(SELECT NguoiDung FROM tbl_NguoiDung Where MaNV=TaiKhoan) TaiKhoan,GhiChu FROM tbl_ThongTin WHERE Ma = '$ma'";
-
+    $sql = "DELETE FROM tbl_ThongTin WHERE Ma='$ma'";
     $stmt = sqlsrv_query($conn, $sql);
 
     if ($stmt === false) {
@@ -127,35 +155,18 @@ function searchMa($ma)
         die(print_r(sqlsrv_errors(), true));
     }
 
-    $arr = [];
-
-    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-        $ma = html_entity_decode($row["Ma"]);
-        $ten = $row["Ten"];
-        $viTri = $row["Vitri"];
-        $hinhViTri = $row["Hinh_ViTri"];
-        $hinhSoDo = $row["Hinh_SoDoTu"];
-        $vao = $row["Vao"];
-        $ra = $row["Ra"];
-        $danDuong = $row["DanDuong"];
-        $ngay = $row["Ngay"];
-        $taiKhoan = $row["TaiKhoan"];
-        $ghiChu = $row["GhiChu"];
-
-        $arr = [$ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $ngay, $taiKhoan, $ghiChu];
-    }
-
     sqlsrv_free_stmt($stmt); // Giải phóng tài nguyên câu truy vấn
     sqlsrv_close($conn);
 
-    return $arr;
 }
 
-function listAccount()
+
+// Update hinh
+function Up_Hinh_Vitri($ma, $hinh)
 {
     $conn = Connect();
-    $sql = "SELECT * FROM [tbl_NguoiDung]";
 
+    $sql = "UPDATE tbl_ThongTin SET Hinh_Vitri='$hinh' WHERE Ma='$ma'";
     $stmt = sqlsrv_query($conn, $sql);
 
     if ($stmt === false) {
@@ -163,26 +174,32 @@ function listAccount()
         die(print_r(sqlsrv_errors(), true));
     }
 
-    $arr = [];
+    sqlsrv_free_stmt($stmt); // Giải phóng tài nguyên câu truy vấn
+    sqlsrv_close($conn);
+}
 
-    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-        $ma = html_entity_decode($row["MaNV"]);
-        $ten = $row["NguoiDung"];
+function Up_Hinh_Sodo($ma, $hinh)
+{
+    $conn = Connect();
 
-        array_push($arr, [$ma, $ten]);
+    $sql = "UPDATE tbl_ThongTin SET Hinh_SoDoTu='$hinh' WHERE Ma='$ma'";
+    $stmt = sqlsrv_query($conn, $sql);
+
+    if ($stmt === false) {
+        echo "Lỗi truy vấn.</br>";
+        die(print_r(sqlsrv_errors(), true));
     }
 
     sqlsrv_free_stmt($stmt); // Giải phóng tài nguyên câu truy vấn
     sqlsrv_close($conn);
-
-    return $arr;
 }
 
-//Xuất maNV theo ten
+
+// Xuất mã NV theo tên
 function ma_theo_tenNV($tenNV)
 {
     $conn = Connect();
-    $sql = "SELECT * FROM [tbl_NguoiDung]";
+    $sql = "SELECT MaNV,NguoiDung FROM tbl_NguoiDung";
 
     $stmt = sqlsrv_query($conn, $sql);
 
@@ -203,11 +220,11 @@ function ma_theo_tenNV($tenNV)
     return $ma;
 }
 
-//Xuất ten theo maNV
+// Xuất tên NV theo mã
 function tenNV_theo_ma($ma)
 {
     $conn = Connect();
-    $sql = "SELECT * FROM [tbl_NguoiDung]";
+    $sql = "SELECT MaNV,NguoiDung FROM [tbl_NguoiDung]";
 
     $stmt = sqlsrv_query($conn, $sql);
 
@@ -229,41 +246,8 @@ function tenNV_theo_ma($ma)
     return $tenNV;
 }
 
-function searchInfor($infor)
-{
-    $conn = Connect();
-    $sql = "SELECT * FROM tbl_ThongTin WHERE Ma LIKE '%$infor%' OR Ten LIKE '%$infor%' OR Vitri LIKE '%$infor%' OR Vao LIKE '%$infor%' OR Ra LIKE '%$infor%' OR DanDuong LIKE '%$infor%' OR GhiChu LIKE '%$infor%' OR Ngay LIKE '%$infor%' OR TaiKhoan LIKE '%$infor%'";
-    $stmt = sqlsrv_query($conn, $sql);
 
-    if ($stmt === false) {
-        echo "Lỗi truy vấn.</br>";
-        die(print_r(sqlsrv_errors(), true));
-    }
-
-    $arr = [];
-
-    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-        $ma = html_entity_decode($row["Ma"]);
-        $ten = $row["Ten"];
-        $viTri = $row["Vitri"];
-        $hinhViTri = $row["Hinh_ViTri"];
-        $hinhSoDo = $row["Hinh_SoDoTu"];
-        $vao = $row["Vao"];
-        $ra = $row["Ra"];
-        $danDuong = $row["DanDuong"];
-        $ngay = $row["Ngay"];
-        $taiKhoan = $row["TaiKhoan"];
-        $ghiChu = $row["GhiChu"];
-
-        array_push($arr, [$ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $ngay, $taiKhoan, $ghiChu]);
-    }
-
-    sqlsrv_free_stmt($stmt); // Giải phóng tài nguyên câu truy vấn
-    sqlsrv_close($conn);
-
-    return $arr;
-}
-
+// Kiểm tra đang nhập
 function checkLogin($user, $pass)
 {
     $conn = Connect();

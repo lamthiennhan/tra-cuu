@@ -21,7 +21,7 @@ if (isset($_POST['ma'])) {
     $taiKhoan = $_COOKIE['user'];
 }
 
-//Upload file
+// Upload file
 if (isset($_FILES["fileViTri"]) && $_FILES["fileViTri"]["name"] != null) {
     $target_dir = "images/";
     $target_file = $target_dir . basename($_FILES["fileViTri"]["name"]);
@@ -99,8 +99,8 @@ if (isset($_FILES["fileSoDo"]) && $_FILES["fileSoDo"]["name"] != null) {
         echo "Sorry, your file was not uploaded.";
         // if everything is ok, try to upload file
     } else {
-        if (move_uploaded_file($_FILES["fileViTri"]["tmp_name"], $target_file)) {
-            echo "The file " . htmlspecialchars(basename($_FILES["fileViTri"]["name"])) . " has been uploaded.";
+        if (move_uploaded_file($_FILES["fileSoDo"]["tmp_name"], $target_file)) {
+            echo "The file " . htmlspecialchars(basename($_FILES["fileSoDo"]["name"])) . " has been uploaded.";
             echo "==============================.'$ma'";
         } else {
             echo "Sorry, there was an error uploading your file.";
@@ -108,10 +108,9 @@ if (isset($_FILES["fileSoDo"]) && $_FILES["fileSoDo"]["name"] != null) {
     }
 }
 
+if (isset($_POST['ma'])) {
+    add($ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $ghiChu, $ngay, $taiKhoan);
+}
 
-// if (isset($_POST['ma'])) {
-//     add($ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $ghiChu, $ngay, $taiKhoan);
-// }
-
-// header("location:reAdd.php");
+header("location:reAdd.php");
 ?>

@@ -7,7 +7,7 @@ $listInfor = [];
 $time = time();
 $datetimeinfo = getdate($time);
 
-$ngay = $datetimeinfo['mon']."/".$datetimeinfo['mday']."/".$datetimeinfo['year'];
+$ngay = $datetimeinfo['mon'] . "/" . $datetimeinfo['mday'] . "/" . $datetimeinfo['year'];
 
 $ma = $_POST['ma'];
 $ten = $_POST['ten'];
@@ -97,8 +97,8 @@ if (isset($_FILES["fileSoDo"]) && $_FILES["fileSoDo"]["name"] != null) {
     echo "Sorry, your file was not uploaded.";
     // if everything is ok, try to upload file
   } else {
-    if (move_uploaded_file($_FILES["fileViTri"]["tmp_name"], $target_file)) {
-      echo "The file " . htmlspecialchars(basename($_FILES["fileViTri"]["name"])) . " has been uploaded.";
+    if (move_uploaded_file($_FILES["fileSoDo"]["tmp_name"], $target_file)) {
+      echo "The file " . htmlspecialchars(basename($_FILES["fileSoDo"]["name"])) . " has been uploaded.";
       echo "==============================.'$ma'";
     } else {
       echo "Sorry, there was an error uploading your file.";
