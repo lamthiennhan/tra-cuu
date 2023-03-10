@@ -9,7 +9,7 @@ $datetimeinfo = getdate($time);
 
 $ngay = $datetimeinfo['mon'] . "/" . $datetimeinfo['mday'] . "/" . $datetimeinfo['year'];
 
-$ma = $_POST['ma'];
+$ma = $_GET['ma'];
 $ten = $_POST['ten'];
 $viTri = $_POST['viTri'];
 $vao = $_POST['vao'];
@@ -106,7 +106,11 @@ if (isset($_FILES["fileSoDo"]) && $_FILES["fileSoDo"]["name"] != null) {
   }
 }
 
-edit($ma, $ten, $viTri, $vao, $ra, $danDuong, $ghiChu, $ngay, $taiKhoan);
+edit($ma, $ten, $viTri, $vao, $ra, $danDuong, $ghiChu, $ngay, $taiKhoan); ?>
 
-header("location:reEdit.php?ma=$ma");
-?>
+<script>
+  window.alert("Sửa thành công !");
+  setTimeout(function () {
+    window.location.href = 'index.php?search_ma=<?php echo $ma ?>'; // the redirect goes here
+  }, 1000);
+</script>

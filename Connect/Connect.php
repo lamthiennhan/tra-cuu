@@ -20,7 +20,8 @@ function Connect()
 function searchMa($ma)
 {
     $conn = Connect();
-    $sql = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay,(SELECT NguoiDung FROM tbl_NguoiDung Where MaNV=TaiKhoan) TaiKhoan,GhiChu FROM tbl_ThongTin WHERE Ma = '$ma'";
+    $sql = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay,(SELECT NguoiDung FROM tbl_NguoiDung Where MaNV=TaiKhoan) TaiKhoan FROM tbl_ThongTin
+    WHERE Ma = '$ma'";
 
     $stmt = sqlsrv_query($conn, $sql);
 
@@ -59,7 +60,9 @@ function searchInfor($infor)
 
     $infor = "N'%" . $infor . "%'";
 
-    $sql = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay,(SELECT NguoiDung FROM tbl_NguoiDung Where MaNV=TaiKhoan) TaiKhoan FROM tbl_ThongTin WHERE Ma LIKE $infor OR Ten LIKE $infor OR Vitri LIKE $infor OR Vao LIKE $infor OR Ra LIKE $infor OR DanDuong LIKE $infor OR GhiChu LIKE $infor OR Ngay LIKE $infor OR TaiKhoan LIKE $infor";
+    $sql = "SELECT *,CONVERT(varchar, Ngay, 103) Ngay,(SELECT NguoiDung FROM tbl_NguoiDung Where MaNV=TaiKhoan) TaiKhoan FROM tbl_ThongTin
+    WHERE Ma LIKE $infor OR Ten LIKE $infor OR Vitri LIKE $infor OR Vao LIKE $infor OR Ra LIKE $infor OR DanDuong LIKE $infor OR GhiChu
+    LIKE $infor OR Ngay LIKE $infor OR TaiKhoan LIKE $infor";
     $stmt = sqlsrv_query($conn, $sql);
 
     if ($stmt === false) {
@@ -251,7 +254,7 @@ function tenNV_theo_ma($ma)
 function checkLogin($user, $pass)
 {
     $conn = Connect();
-    $sql = "SELECT * FROM [tbl_NguoiDung]";
+    $sql = "SELECT * FROM tbl_NguoiDung";
 
     $stmt = sqlsrv_query($conn, $sql);
 
@@ -262,6 +265,31 @@ function checkLogin($user, $pass)
 
     while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
         if ($pass == $row["MatKhau"] && $user == html_entity_decode($row["MaNV"])) {
+            return true;
+        }
+    }
+
+    sqlsrv_free_stmt($stmt); // Giải phóng tài nguyên câu truy vấn
+    sqlsrv_close($conn);
+
+    return false;
+}
+
+// Check trùng mã
+function checTrungkMa($ma)
+{
+    $conn = Connect();
+    $sql = "SELECT Ma FROM tbl_ThongTin";
+
+    $stmt = sqlsrv_query($conn, $sql);
+
+    if ($stmt === false) {
+        echo "Lỗi truy vấn.</br>";
+        die(print_r(sqlsrv_errors(), true));
+    }
+
+    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+        if ($ma == html_entity_decode($row["Ma"])) {
             return true;
         }
     }

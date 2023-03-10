@@ -1,53 +1,41 @@
 <?php
 include "Connect/Connect.php";
 
-if (isset($_POST['user']) && isset($_POST['pass'])) {
-	if (checkLogin($_POST['user'], $_POST['pass'])) {
-		$c_user = $_POST['user'];
-		setcookie("user", $c_user, time() + 86400); // 86400 = 1 day
-		header("location:index.php");
-	}
+if (count($_COOKIE) <= 0) {
+    if (isset($_POST['user']) && isset($_POST['pass'])) {
+        if (checkLogin($_POST['user'], $_POST['pass'])) {
+            setcookie("user", $_POST['user'], time() + 86400);
+            header("location:index.php");
+        }
+    }
 }
 ?>
 
 <!DOCTYPE html>
-<html>
-
-<!-- Head -->
+<html lang="en">
 
 <head>
-
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Đăng Nhập</title>
 
-	<!-- Meta-Tags -->
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="keywords"
-		content="Existing Login Form Widget Responsive, Login Form Web Template, Flat Pricing Tables, Flat Drop-Downs, Sign-Up Web Templates, Flat Web Templates, Login Sign-up Responsive Web Template, Smartphone Compatible Web Template, Free Web Designs for Nokia, Samsung, LG, Sony Ericsson, Motorola Web Design">
-	<script
-		type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-
-	<!-- Style -->
-	<link rel="stylesheet" href="css/login.css" type="text/css" media="all">
+	<link rel="stylesheet" href="css/loginn.css" type="text/css" media="all">
 
 	<!-- Fonts -->
 	<link href="//fonts.googleapis.com/css?family=Quicksand:300,400,500,700" rel="stylesheet">
-	<!-- //Fonts -->
 
 </head>
-<!-- //Head -->
 
-<!-- Body -->
+<body style="background-image: url('./images/br-main.jpg');">
+	<div id="main" style="height: 100vh; display: flex; justify-content: center; flex-direction: column!important;">
+		<h1 style="margin: 0 0 25px 0; font-weight: bold;">Đăng Nhập</h1>
 
-<body>
-	<div id="main" class="d-flex flex-column">
-		<h1>Đăng Nhập</h1>
-
-		<div class="w3layoutscontaineragileits">
-			<h2>Đăng Nhập Tài Khoản</h2>
+		<div class="w3layoutscontaineragileits" style="margin-bottom: 50px;">
+			<h2 style="font-weight: bold;">Đăng Nhập Tài Khoản</h2>
 			<form action="login.php" method="post">
-				<input type="text" Name="user" placeholder="TÀI KHOẢN" required="">
-				<input type="password" Name="pass" placeholder="MẬT KHẨU" required="">
+				<input type="text" Name="user" placeholder="TÀI KHOẢN" required="" style="border-color: white;">
+				<input type="password" Name="pass" placeholder="MẬT KHẨU" required="" style="border-color: white;">
 				<div class="aitssendbuttonw3ls">
 					<input type="submit" value="Đăng nhập">
 					<!-- <p> To register new account <span>→</span> <a class="w3_play_icon1" href="#small-dialog1"> Click Here</a></p>
@@ -55,21 +43,10 @@ if (isset($_POST['user']) && isset($_POST['pass'])) {
 				</div>
 			</form>
 		</div>
-
-		<div class="w3footeragile">
-			<p> &copy; 2017 Existing Login Form. All Rights Reserved | Design by <a href="http://w3layouts.com"
-					target="_blank">W3layouts</a></p>
-		</div>
 	</div>
 
-
-	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
-
-	<!-- pop-up-box-js-file -->
-	<script src="js/jquery.magnific-popup.js" type="text/javascript"></script>
-	<!--//pop-up-box-js-file -->
 	<script>
-		$(document).ready(function () {
+		$( document ).ready(function () {
 			$('.w3_play_icon,.w3_play_icon1,.w3_play_icon2').magnificPopup({
 				type: 'inline',
 				fixedContentPos: false,
@@ -84,8 +61,6 @@ if (isset($_POST['user']) && isset($_POST['pass'])) {
 
 		});
 	</script>
-
 </body>
-<!-- //Body -->
 
 </html>

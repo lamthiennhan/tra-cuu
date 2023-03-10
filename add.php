@@ -6,20 +6,18 @@ $datetimeinfo = getdate($time);
 
 $ngay = $datetimeinfo['mon'] . "/" . $datetimeinfo['mday'] . "/" . $datetimeinfo['year'];
 
-if (isset($_POST['ma'])) {
-    $ma = $_POST['ma'];
-    $ten = $_POST['ten'];
-    $viTri = $_POST['viTri'];
-    $vao = $_POST['vao'];
-    $ra = $_POST['ra'];
-    $danDuong = $_POST['danDuong'];
-    $ghiChu = $_POST['ghiChu'];
+$ma = $_POST['ma'];
+$ten = $_POST['ten'];
+$viTri = $_POST['viTri'];
+$vao = $_POST['vao'];
+$ra = $_POST['ra'];
+$danDuong = $_POST['danDuong'];
+$ghiChu = $_POST['ghiChu'];
 
-    $hinhViTri = "";
-    $hinhSoDo = "";
+$hinhViTri = "";
+$hinhSoDo = "";
 
-    $taiKhoan = $_COOKIE['user'];
-}
+$taiKhoan = $_COOKIE['user'];
 
 // Upload file
 if (isset($_FILES["fileViTri"]) && $_FILES["fileViTri"]["name"] != null) {
@@ -108,9 +106,19 @@ if (isset($_FILES["fileSoDo"]) && $_FILES["fileSoDo"]["name"] != null) {
     }
 }
 
-if (isset($_POST['ma'])) {
-    add($ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $ghiChu, $ngay, $taiKhoan);
-}
-
-header("location:reAdd.php");
-?>
+if (!checTrungkMa($ma)) {
+    add($ma, $ten, $viTri, $hinhViTri, $hinhSoDo, $vao, $ra, $danDuong, $ghiChu, $ngay, $taiKhoan); ?>
+    <script>
+        window.alert("Thêm thành công !");
+        setTimeout(function () {
+            window.location.href = 'index.php'; // the redirect goes here
+        }, 1000);
+    </script>
+<?php } else { ?>
+    <script>
+        window.alert("Trùng mã !");
+        setTimeout(function () {
+            window.location.href = 'reAdd.php'; // the redirect goes here
+        }, 1000);
+    </script>
+<?php } ?>
